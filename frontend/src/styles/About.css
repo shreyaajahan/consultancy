@@ -1,0 +1,167 @@
+.about-page {
+  width: 100%;
+}
+
+/* Company Overview */
+.company-overview {
+  padding: 60px 0;
+}
+
+.overview-content {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.overview-content h2 {
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: var(--dark-color);
+}
+
+.overview-content p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--gray);
+  margin-bottom: 20px;
+}
+
+/* Vision & Mission */
+.vision-mission {
+  padding: 60px 0;
+  background-color: var(--light-color);
+}
+
+.vm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+}
+
+.vm-card {
+  background: var(--white);
+  padding: 40px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  text-align: center;
+  transition: var(--transition);
+}
+
+.vm-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.vm-icon {
+  font-size: 60px;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.vm-card h3 {
+  font-size: 28px;
+  margin-bottom: 15px;
+  color: var(--dark-color);
+}
+
+.vm-card p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--gray);
+}
+
+/* Core Values */
+.core-values {
+  padding: 60px 0;
+}
+
+.core-values h2 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 50px;
+  color: var(--dark-color);
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.value-card {
+  padding: 30px;
+  border: 2px solid var(--light-color);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.value-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--box-shadow);
+}
+
+.value-icon {
+  font-size: 40px;
+  color: var(--success);
+  margin-bottom: 15px;
+}
+
+.value-card h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: var(--dark-color);
+}
+
+.value-card p {
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+/* Experience Section */
+.experience-section {
+  padding: 60px 0;
+  background-color: var(--light-color);
+}
+
+.experience-section h2 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: var(--dark-color);
+}
+
+.experience-text {
+  max-width: 800px;
+  margin: 0 auto 40px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--gray);
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.timeline-item {
+  text-align: center;
+  padding: 30px;
+  background: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.timeline-item h4 {
+  font-size: 32px;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.timeline-item p {
+  color: var(--gray);
+  font-size: 16px;
+}

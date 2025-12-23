@@ -1,0 +1,65 @@
+/* Reusing AdminServices.css styles + additional */
+@import './AdminServices.css';
+
+.enquiry-details {
+  padding: 20px;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.detail-item {
+  display: flex;
+  gap: 15px;
+}
+
+.detail-icon {
+  font-size: 24px;
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.detail-item label,
+.detail-full label {
+  font-weight: 600;
+  color: var(--dark-color);
+  margin-bottom: 5px;
+  display: block;
+}
+
+.detail-item p,
+.detail-full p {
+  color: var(--gray);
+  margin: 0;
+}
+
+.detail-full {
+  margin-bottom: 20px;
+}
+
+.message-text {
+  background-color: var(--light-color);
+  padding: 15px;
+  border-radius: var(--border-radius);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.status-select {
+  max-width: 250px;
+  padding: 10px;
+  border: 2px solid var(--light-color);
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .detail-row {
+    grid-template-columns: 1fr;
+  }
+}
