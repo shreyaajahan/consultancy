@@ -6,11 +6,49 @@
   z-index: 100;
 }
 
+.topbar {
+  /* use deep navy for a professional header instead of amber */
+  background-color: var(--primary-color);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+}
+
+.contact-small {
+  opacity: 0.95;
+}
+
+.top-cta {
+  background-color: var(--white);
+  color: var(--primary-color);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  border: 2px solid rgba(11,38,53,0.08);
+  box-shadow: 0 6px 18px rgba(6,22,34,0.06);
+  transition: var(--transition);
+}
+
+.top-cta:hover{
+  background-color: var(--primary-color);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(11,38,53,0.18);
+}
+
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 0;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(6,22,34,0.04);
 }
 
 .logo {
@@ -19,31 +57,40 @@
 }
 
 .logo h1 {
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 28px;
+  color: var(--primary-color);
+  font-weight: 800;
 }
 
 .nav {
   display: flex;
-  gap: 30px;
+  gap: 28px;
+  align-items: center;
+}
+
+.logo .tagline {
+  font-size: 13px;
+  color: var(--gray);
+  margin-top: 4px;
 }
 
 .nav a {
   text-decoration: none;
   color: var(--dark-color);
-  font-weight: 500;
+  font-weight: 600;
   transition: var(--transition);
   position: relative;
+  padding: 8px 4px;
 }
 
 .nav a::after {
   content: '';
   position: absolute;
-  bottom: -5px;
+  bottom: -6px;
   left: 0;
   width: 0;
-  height: 2px;
-  background-color: var(--primary-color);
+  height: 3px;
+  background-color: var(--secondary-color);
   transition: var(--transition);
 }
 
@@ -62,10 +109,11 @@
 }
 
 .menu-toggle span {
-  width: 25px;
+  width: 26px;
   height: 3px;
   background-color: var(--dark-color);
   transition: var(--transition);
+  border-radius: 2px;
 }
 
 @media (max-width: 768px) {
@@ -75,14 +123,14 @@
 
   .nav {
     position: fixed;
-    top: 70px;
+    top: 76px;
     right: -100%;
-    width: 250px;
-    height: calc(100vh - 70px);
+    width: 280px;
+    height: calc(100vh - 76px);
     background-color: var(--white);
     flex-direction: column;
-    padding: 30px;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    padding: 28px;
+    box-shadow: -6px 0 24px rgba(6,22,34,0.08);
     transition: var(--transition);
   }
 
