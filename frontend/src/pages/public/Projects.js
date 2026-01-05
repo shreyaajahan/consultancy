@@ -40,7 +40,7 @@ const Projects = () => {
     <Layout>
       <div className="projects-page">
         {/* Hero Section */}
-        <section className="hero page-hero" style={{backgroundImage: `url('https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80')`}}>
+        <section className="hero page-hero" style={{backgroundImage: `url('https://www.constructionworld.in/assets/uploads/13a98c40261296c534a4868124aecf91.jpg')`}}>
           <div className="hero-overlay">
             <div className="container">
               <div className="hero-grid">
@@ -48,9 +48,9 @@ const Projects = () => {
                   <div className="glass-panel">
                     <h1>Our Projects</h1>
                     <p className="lead">Showcasing Our construction excellence across residential, commercial and industrial projects.</p>
-                    <div className="hero-buttons">
+                    {/* <div className="hero-buttons">
                       <a href="#projects" className="btn btn-secondary">Browse Projects</a>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 

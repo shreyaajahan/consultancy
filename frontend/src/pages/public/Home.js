@@ -9,28 +9,31 @@ const Home = () => {
     <Layout>
       <div className="home">
         {/* Hero Section */}
-        <section className="hero parallax-hero" style={{backgroundImage: `url('https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80')`}}>
+        <section className="hero parallax-hero" style={{backgroundImage: `url('https://www.constructionworld.in/assets/uploads/13a98c40261296c534a4868124aecf91.jpg')`}}>
           <div className="hero-overlay">
             <div className="container">
               <div className="hero-grid">
                 <div className="hero-left reveal slide-up" style={{animationDelay: '120ms'}}>
                   <div className="glass-panel">
-                    <h1>Building Your Dreams Into Reality</h1>
-                    <p className="lead">Design · Build · Deliver — Professional construction services with a focus on quality, safety and timely delivery.</p>
+                    <h1><b>Building Your Dreams Into Reality</b></h1>
+                    <p className="lead"><b>Design · Build · Deliver — Professional construction services with a focus on quality, safety and timely delivery.</b></p>
 
-                    <div className="hero-buttons">
+                    {/* <div className="hero-buttons">
                       <Link to="/projects" className="btn btn-primary">View Projects</Link>
                       <Link to="/contact" className="btn btn-secondary">Request Quote</Link>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
                 <div className="hero-right reveal zoom-in stagger-2">
                   <div className="hero-image">
-                    <img alt="construction site" src="https://images.unsplash.com/photo-1517821365205-71c7b2a22b8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80" />
+                    <img
+                      alt="construction site"
+                      src="https://www.constructionworld.in/assets/uploads/13a98c40261296c534a4868124aecf91.jpg"
+                    />
                     <div className="brand-badge">
                       <h3>Nivas Constructions</h3>
-                      <p>Quality • Safety • Trust</p>
+                      <p><b>Quality • Safety • Trust</b></p>
                     </div>
                   </div>
                 </div>
@@ -49,7 +52,7 @@ const Home = () => {
               <div className="stat-card reveal slide-up stagger-1">
                 <div className="stat-icon"><FaBuilding /></div>
                 <div>
-                  <div className="stat-number">500+</div>
+                  <div className="stat-number">50+</div>
                   <div className="stat-meta">Projects Completed</div>
                 </div>
               </div>
@@ -57,7 +60,7 @@ const Home = () => {
               <div className="stat-card reveal slide-up stagger-2">
                 <div className="stat-icon"><FaUsers /></div>
                 <div>
-                  <div className="stat-number">1000+</div>
+                  <div className="stat-number">300+</div>
                   <div className="stat-meta">Happy Clients</div>
                 </div>
               </div>
@@ -73,7 +76,7 @@ const Home = () => {
               <div className="stat-card reveal slide-up stagger-4">
                 <div className="stat-icon"><FaAward /></div>
                 <div>
-                  <div className="stat-number">25+</div>
+                  <div className="stat-number">20+</div>
                   <div className="stat-meta">Years Experience</div>
                 </div>
               </div>
@@ -88,7 +91,7 @@ const Home = () => {
               <div className="about-text">
                 <h2>About Nivas Constructions</h2>
                 <p>
-                  With over 25 years of experience in the construction industry, Nivas Constructions 
+                  With over 20 years of experience in the construction industry, Nivas Constructions 
                   has established itself as a trusted name in building residential, commercial, and 
                   industrial projects.
                 </p>
@@ -138,10 +141,10 @@ const Home = () => {
             <p className="sub">Selected projects showcasing our quality and attention to detail</p>
             <div className="projects-grid">
               <div className="project-card reveal slide-up stagger-1">
-                <div className="project-media"><img alt="project 1" src="https://images.unsplash.com/photo-1533750349088-cd871a92f312?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"/></div>
+                <div className="project-media"><img alt="project 1" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"/></div>
                 <div className="project-body">
-                  <h3>Modern Residential Complex</h3>
-                  <p>High-quality finishes and modern amenities for comfortable living.</p>
+                  <h3>Road Construction</h3>
+                  <p>Professional road infrastructure with superior materials and engineering.</p>
                   <Link to="/projects" className="btn btn-secondary">View Project</Link>
                 </div>
               </div>
@@ -156,7 +159,7 @@ const Home = () => {
               </div>
 
               <div className="project-card reveal slide-up stagger-3">
-                <div className="project-media"><img alt="project 3" src="https://images.unsplash.com/photo-1542444459-db3d60d7f4c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"/></div>
+                <div className="project-media"><img alt="project 3" src="https://images.unsplash.com/photo-1531834685032-c34bf0d84c77?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"/></div>
                 <div className="project-body">
                   <h3>Industrial Warehouse</h3>
                   <p>Robust construction focused on efficiency and longevity.</p>

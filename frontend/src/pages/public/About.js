@@ -8,10 +8,10 @@ const About = () => {
     <Layout>
       <div className="about-page">
         {/* Page Header */}
-        <section className="page-header parallax-hero" style={{backgroundImage: `url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')`}}>
+        <section className="page-header parallax-hero" style={{backgroundImage: `url('https://www.constructionworld.in/assets/uploads/13a98c40261296c534a4868124aecf91.jpg')`}}>
           <div className="container hero-content reveal slide-up" style={{animationDelay: '120ms'}}>
             <h1>About Nivas Constructions</h1>
-            <p>Building Excellence Since 1998</p>
+            <p><center/>Building Excellence Since 2005</p>
           </div>
         </section>
 
@@ -24,18 +24,18 @@ const About = () => {
                 <div className="who-text reveal slide-up stagger-1">
                   <p>
                     Nivas Constructions is a leading construction company based in Chennai, Tamil Nadu, 
-                    with over 25 years of experience in delivering exceptional construction projects. 
+                    with over 20 years of experience in delivering exceptional construction projects. 
                     We specialize in residential, commercial, and industrial construction, offering 
                     end-to-end solutions from planning to completion.
                   </p>
                   <p>
                     Our commitment to quality, innovation, and customer satisfaction has made us one 
                     of the most trusted names in the construction industry. We have successfully 
-                    completed over 500 projects, earning the trust of more than 1000 satisfied clients.
+                    completed over 60 projects, earning the trust of more than 300 satisfied clients.
                   </p>
                 </div>
                 <div className="who-image reveal zoom-in stagger-2">
-                  <img alt="construction site" src="https://images.unsplash.com/photo-1529429617124-9f3a6e0b2c4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" />
+                  <img alt="construction site" src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" />
                 </div>
               </div>
             </div>
@@ -108,7 +108,7 @@ const About = () => {
         {/* Experience Section */}
         <section className="experience-section">
           <div className="container">
-            <h2>25+ Years of Excellence</h2>
+            <h2>20+ Years of Excellence</h2>
             <p className="experience-text">
               Since our establishment in 1998, Nivas Constructions has grown from a small local 
               contractor to one of the most respected construction companies in Tamil Nadu. Our 
@@ -117,7 +117,7 @@ const About = () => {
             </p>
             <div className="timeline">
               <div className="timeline-item reveal stagger-1">
-                <h4>1998</h4>
+                <h4>2005</h4>
                 <p>Company Founded</p>
               </div>
               <div className="timeline-item reveal stagger-2">
@@ -126,7 +126,7 @@ const About = () => {
               </div>
               <div className="timeline-item reveal stagger-3">
                 <h4>2015</h4>
-                <p>500+ Projects Milestone</p>
+                <p>50+ Projects Milestone</p>
               </div>
               <div className="timeline-item reveal stagger-4">
                 <h4>2023</h4>

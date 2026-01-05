@@ -31,7 +31,7 @@ const Services = () => {
     <Layout>
       <div className="services-page">
         {/* Hero Section */}
-        <section className="hero page-hero" style={{backgroundImage: `url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80')`}}>
+        <section className="hero page-hero" style={{backgroundImage: `url('https://www.constructionworld.in/assets/uploads/13a98c40261296c534a4868124aecf91.jpg')`}}>
           <div className="hero-overlay">
             <div className="container">
               <div className="hero-grid">
@@ -39,9 +39,9 @@ const Services = () => {
                   <div className="glass-panel">
                     <h1>Our Services</h1>
                     <p className="lead">Comprehensive Construction Solutions for Every Need — design, build and maintain with expertise.</p>
-                    <div className="hero-buttons">
+                    {/* <div className="hero-buttons">
                       <a href="#services" className="btn btn-secondary">Explore Services</a>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
