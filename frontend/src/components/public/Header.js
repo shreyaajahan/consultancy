@@ -11,20 +11,23 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className="topbar">
+      {/* <div className="topbar">
         <div className="container topbar-inner">
           <div className="contact-small">Call us: +91 1234567890 • info@nivasconstructions.com</div>
           <div>
             <Link to="/contact" className="btn top-cta">Request Quote</Link>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="container">
         <div className="header-content">
           <Link to="/" className="logo">
-            <h1>Nivas Constructions</h1>
-            <div className="tagline">Quality. Safety. Trust.</div>
+            <img src="/logo.svg" alt="Nivas Constructions Logo" className="logo-img" />
+            <div className="logo-text">
+              <h1>Nivas Constructions</h1>
+              <div className="tagline">Quality. Safety. Trust.</div>
+            </div>
           </Link>
 
           <button className="menu-toggle" onClick={toggleMenu}>

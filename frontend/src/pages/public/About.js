@@ -9,9 +9,16 @@ const About = () => {
       <div className="about-page">
         {/* Page Header */}
         <section className="page-header parallax-hero" style={{backgroundImage: `url('https://www.constructionworld.in/assets/uploads/13a98c40261296c534a4868124aecf91.jpg')`}}>
-          <div className="container hero-content reveal slide-up" style={{animationDelay: '120ms'}}>
-            <h1>About Nivas Constructions</h1>
-            <p><center/>Building Excellence Since 2005</p>
+          <div className="container">
+            <div className="page-header-content">
+              <div className="page-header-text reveal slide-up" style={{animationDelay: '120ms'}}>
+                <h1>Nivas Constructions</h1>
+                <p>Building Excellence Since 2005</p>
+              </div>
+              <div className="page-header-image reveal zoom-in stagger-2">
+                <img alt="About Nivas Constructions" src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" />
+              </div>
+            </div>
           </div>
         </section>
 
@@ -23,7 +30,7 @@ const About = () => {
               <div className="who-grid">
                 <div className="who-text reveal slide-up stagger-1">
                   <p>
-                    Nivas Constructions is a leading construction company based in Chennai, Tamil Nadu, 
+                    Nivas Constructions is a leading construction company based in Namakkal, Tamil Nadu, 
                     with over 20 years of experience in delivering exceptional construction projects. 
                     We specialize in residential, commercial, and industrial construction, offering 
                     end-to-end solutions from planning to completion.
@@ -108,13 +115,15 @@ const About = () => {
         {/* Experience Section */}
         <section className="experience-section">
           <div className="container">
-            <h2>20+ Years of Excellence</h2>
-            <p className="experience-text">
-              Since our establishment in 1998, Nivas Constructions has grown from a small local 
-              contractor to one of the most respected construction companies in Tamil Nadu. Our 
-              journey has been marked by continuous growth, innovation, and an unwavering 
-              commitment to excellence.
-            </p>
+            <div className="experience-card">
+              <h2>20+ Years of Excellence</h2>
+              <p className="experience-text">
+                Since our establishment in 2005, Nivas Constructions has grown from a small local 
+                contractor to one of the most respected construction companies in Tamil Nadu. Our 
+                journey has been marked by continuous growth, innovation, and an unwavering 
+                commitment to excellence.
+              </p>
+            </div>
             <div className="timeline">
               <div className="timeline-item reveal stagger-1">
                 <h4>2005</h4>

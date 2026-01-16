@@ -55,29 +55,20 @@ const Contact = () => {
     <Layout>
       <div className="contact-page">
         {/* Hero Section */}
-        <section className="hero page-hero contact-hero">
-          <div className="hero-overlay">
+        <section className="page-header parallax-hero" style={{backgroundImage: `url('https://www.constructionworld.in/assets/uploads/13a98c40261296c534a4868124aecf91.jpg')`}}>
             <div className="container">
-              <div className="hero-grid">
-                <div className="hero-left reveal slide-up" style={{animationDelay: '100ms'}}>
-                  <div className="glass-panel">
-                    <h1>Contact Us</h1>
-                    <p className="lead">Get in touch for consultations, quotes and project enquiries — we’re here to help.</p>
-                    <div className="hero-buttons">
-                      <a href="#form" className="btn btn-secondary">Send A Message</a>
-                    </div>
-                  </div>
+              <div className="page-header-content">
+                <div className="page-header-text reveal slide-up" style={{animationDelay: '120ms'}}>
+                  <h1>Contact Us</h1>
+                  <p>Get in touch for consultations, quotes and project enquiries — we're here to help.</p>
                 </div>
-                <div className="hero-right reveal zoom-in" style={{animationDelay: '160ms'}}>
-                  <div className="hero-image">
-                    <img
-                      alt="construction site"
-                      src="https://www.constructionworld.in/assets/uploads/13a98c40261296c534a4868124aecf91.jpg" />
-                  </div>
+                <div className="page-header-image reveal zoom-in stagger-2">
+                  <img
+                    alt="Contact Nivas Constructions"
+                    src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" />
                 </div>
               </div>
             </div>
-          </div>
         </section>
 
         {/* Contact Section */}
@@ -97,8 +88,7 @@ const Contact = () => {
                     <FaPhone className="contact-icon" />
                     <div>
                       <h4>Phone</h4>
-                      <p>+91 1234567890</p>
-                      <p>+91 0987654321</p>
+                      <p>+91 9976728000</p>
                     </div>
                   </div>
 
@@ -106,8 +96,7 @@ const Contact = () => {
                     <FaEnvelope className="contact-icon" />
                     <div>
                       <h4>Email</h4>
-                      <p>info@nivasconstructions.com</p>
-                      <p>support@nivasconstructions.com</p>
+                      <p>palanisamyv1973@gmail.com</p>
                     </div>
                   </div>
 
@@ -115,8 +104,8 @@ const Contact = () => {
                     <FaMapMarkerAlt className="contact-icon" />
                     <div>
                       <h4>Address</h4>
-                      <p>123 Construction Street</p>
-                      <p>Chennai, Tamil Nadu 600001</p>
+                      <p>30,Pallipatti Belukkurichi (p.o)</p>
+                      <p>Namakkal, Tamil Nadu 637402</p>
                     </div>
                   </div>
 

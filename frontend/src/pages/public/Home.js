@@ -72,7 +72,7 @@ const Home = () => {
                   <div className="stat-meta">Expert Team</div>
                 </div>
               </div>
-
+ 
               <div className="stat-card reveal slide-up stagger-4">
                 <div className="stat-icon"><FaAward /></div>
                 <div>
