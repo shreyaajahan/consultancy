@@ -70,9 +70,9 @@
   background: linear-gradient(135deg, #fa709a, #fee140);
 }
 
-.stat-icon.new-enquiries {
+/* .stat-icon.new-enquiries {
   background: linear-gradient(135deg, #30cfd0, #330867);
-}
+} */
 
 .stat-info h3 {
   font-size: 32px;

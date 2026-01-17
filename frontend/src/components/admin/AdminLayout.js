@@ -28,7 +28,7 @@ const AdminLayout = ({ children }) => {
       {/* Sidebar */}
       <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
-          <h2>Nivas Admin</h2>
+          <h2>Admin</h2>
         </div>
         
         <nav className="sidebar-nav">
@@ -60,7 +60,7 @@ const AdminLayout = ({ children }) => {
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
           <div className="admin-info">
-            <span>Welcome, {admin?.name || 'Admin'}</span>
+            <span>Welcome,Nivas</span>
           </div>
         </header>
 

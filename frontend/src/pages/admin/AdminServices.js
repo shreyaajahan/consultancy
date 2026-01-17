@@ -73,95 +73,73 @@ const AdminServices = () => {
     try {
       if (editingService) {
         await serviceService.update(editingService._id, formData);
-        alert('Service updated successfully');
       } else {
         await serviceService.create(formData);
-        alert('Service created successfully');
       }
       handleCloseModal();
       fetchServices();
     } catch (err) {
       console.error('Error saving service:', err);
-      alert(err.response?.data?.message || 'Failed to save service');
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this service?')) {
-      try {
-        await serviceService.delete(id);
-        alert('Service deleted successfully');
-        fetchServices();
-      } catch (err) {
-        console.error('Error deleting service:', err);
-        alert('Failed to delete service');
-      }
+    try {
+      await serviceService.delete(id);
+      fetchServices();
+    } catch (err) {
+      console.error('Error deleting service:', err);
     }
   };
 
   return (
     <AdminLayout>
       <div className="admin-services">
-        <div className="page-header">
-          <h1>Manage Services</h1>
-          <button className="btn btn-primary" onClick={() => handleOpenModal()}>
-            <FaPlus /> Add Service
-          </button>
-        </div>
+        <div className="services-container">
+          <div className="services-header">
+            <h1>Manage Services</h1>
+            <button className="btn btn-primary" onClick={() => handleOpenModal()}>
+              <FaPlus /> Add Service
+            </button>
+          </div>
 
-        {loading ? (
-          <div className="loading">Loading services...</div>
-        ) : (
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {services.length === 0 ? (
-                  <tr>
-                    <td colSpan="4" className="no-data">No services found</td>
-                  </tr>
-                ) : (
-                  services.map((service) => (
-                    <tr key={service._id}>
-                      <td>{service.title}</td>
-                      <td className="description-cell">{service.description}</td>
-                      <td>
-                        <span className={`status-badge ${service.isActive ? 'active' : 'inactive'}`}>
-                          {service.isActive ? 'Active' : 'Inactive'}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="action-buttons">
+          {loading ? (
+            <div className="loading">Loading services...</div>
+          ) : (
+            <div className="services-content">
+              {services.length === 0 ? (
+                <div className="no-services">No services found</div>
+              ) : (
+                <div className="services-grid">
+                  {services.map((service) => (
+                    <div key={service._id} className="service-card">
+                      <div className="service-card-header">
+                        <h3>{service.title}</h3>
+                        <div className="service-actions">
                           <button 
-                            className="btn btn-edit" 
+                            className="action-btn edit-btn" 
                             onClick={() => handleOpenModal(service)}
                             title="Edit"
                           >
                             <FaEdit />
                           </button>
                           <button 
-                            className="btn btn-delete" 
+                            className="action-btn delete-btn" 
                             onClick={() => handleDelete(service._id)}
                             title="Delete"
                           >
                             <FaTrash />
                           </button>
                         </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
+                      </div>
+                      <p className="service-description">{service.description}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Modal */}
         {showModal && (
@@ -195,18 +173,6 @@ const AdminServices = () => {
                     rows="4"
                     required
                   ></textarea>
-                </div>
-
-                <div className="form-group">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="isActive"
-                      checked={formData.isActive}
-                      onChange={handleChange}
-                    />
-                    {' '}Active
-                  </label>
                 </div>
 
                 <div className="modal-actions">

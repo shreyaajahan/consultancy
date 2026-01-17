@@ -109,7 +109,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="stat-card">
+              {/* <div className="stat-card">
                 <div className="stat-icon new-enquiries">
                   <FaEnvelope />
                 </div>
@@ -117,7 +117,7 @@ const Dashboard = () => {
                   <h3>{stats.newEnquiries}</h3>
                   <p>New Enquiries</p>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Quick Actions */}

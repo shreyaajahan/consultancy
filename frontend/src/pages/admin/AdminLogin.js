@@ -41,7 +41,7 @@ const AdminLogin = () => {
       <div className="login-container">
         <div className="login-card">
           <h1>Admin Login</h1>
-          <p>Nivas Constructions Management System</p>
+          <p>Nivas Constructions</p>
 
           {error && (
             <div className="error-message">
