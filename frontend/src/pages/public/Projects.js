@@ -30,6 +30,7 @@ const Projects = () => {
   }, [filter]);
 
   const formatDate = (dateString) => {
+    if (!dateString) return 'Present';
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short'
@@ -120,7 +121,7 @@ const Projects = () => {
                       <p className="project-description">{project.description}</p>
                       <div className="project-details">
                         <p><FaMapMarkerAlt /> {project.location}</p>
-                        <p><FaCalendarAlt /> {formatDate(project.startDate)}</p>
+                        <p><FaCalendarAlt /> {formatDate(project.startDate)} – {formatDate(project.endDate)}</p>
                       </div>
                     </div>
                   </div>

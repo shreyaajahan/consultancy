@@ -4,9 +4,6 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 // Add token to requests if available
@@ -16,6 +13,14 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    // For FormData, let axios handle the content-type header automatically
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type'];
+    } else {
+      config.headers['Content-Type'] = 'application/json';
+    }
+    
     return config;
   },
   (error) => {

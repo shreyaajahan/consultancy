@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { projectService } from '../../services/apiServices';
 import { FaPlus, FaEdit, FaTrash, FaTimes } from 'react-icons/fa';
@@ -9,6 +9,8 @@ const AdminProjects = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
+  const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
+  const [confirmDelete, setConfirmDelete] = useState({ show: false, projectId: null });
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -16,26 +18,34 @@ const AdminProjects = () => {
     status: 'ongoing',
     startDate: '',
     endDate: '',
-    imageUrl: '',
+    image: null,
+    imagePreview: null,
     isActive: true
   });
 
-  useEffect(() => {
-    fetchProjects();
+  const showNotification = useCallback((message, type = 'success') => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification({ show: false, message: '', type: 'success' });
+    }, 3500);
   }, []);
 
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       setLoading(true);
       const response = await projectService.getAllAdmin();
       setProjects(response.data);
     } catch (err) {
       console.error('Error fetching projects:', err);
-      alert('Failed to fetch projects');
+      showNotification('Failed to fetch projects', 'error');
     } finally {
       setLoading(false);
     }
-  };
+  }, [showNotification]);
+
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
 
   const handleOpenModal = (project = null) => {
     if (project) {
@@ -47,7 +57,8 @@ const AdminProjects = () => {
         status: project.status,
         startDate: project.startDate ? new Date(project.startDate).toISOString().split('T')[0] : '',
         endDate: project.endDate ? new Date(project.endDate).toISOString().split('T')[0] : '',
-        imageUrl: project.imageUrl || '',
+        image: null,
+        imagePreview: project.imageUrl || null,
         isActive: project.isActive
       });
     } else {
@@ -59,7 +70,8 @@ const AdminProjects = () => {
         status: 'ongoing',
         startDate: '',
         endDate: '',
-        imageUrl: '',
+        image: null,
+        imagePreview: null,
         isActive: true
       });
     }
@@ -72,132 +84,142 @@ const AdminProjects = () => {
   };
 
   const handleChange = (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setFormData({
-      ...formData,
-      [e.target.name]: value
-    });
+    if (e.target.type === 'file') {
+      const file = e.target.files[0];
+      if (file) {
+        setFormData({
+          ...formData,
+          image: file,
+          imagePreview: URL.createObjectURL(file)
+        });
+      }
+    } else {
+      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+      setFormData({
+        ...formData,
+        [e.target.name]: value
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Client-side validation
+    if (!formData.title || !formData.description || !formData.location || !formData.startDate) {
+      showNotification('Please fill in all required fields (Title, Description, Location, Start Date)', 'error');
+      return;
+    }
+    
     try {
-      const submitData = {
-        ...formData,
-        endDate: formData.endDate || undefined
-      };
+      const submitFormData = new FormData();
+      submitFormData.append('title', formData.title);
+      submitFormData.append('description', formData.description);
+      submitFormData.append('location', formData.location);
+      submitFormData.append('status', formData.status);
+      submitFormData.append('startDate', formData.startDate);
+      if (formData.endDate) submitFormData.append('endDate', formData.endDate);
+      submitFormData.append('isActive', formData.isActive);
+      
+      if (formData.image) {
+        submitFormData.append('image', formData.image);
+      }
+
+      // Debug: Log FormData contents
+      console.log('FormData contents:');
+      for (let [key, value] of submitFormData.entries()) {
+        console.log(`${key}:`, value);
+      }
 
       if (editingProject) {
-        await projectService.update(editingProject._id, submitData);
-        alert('Project updated successfully');
+        await projectService.update(editingProject._id, submitFormData);
+        showNotification('Project updated successfully', 'success');
       } else {
-        await projectService.create(submitData);
-        alert('Project created successfully');
+        await projectService.create(submitFormData);
+        showNotification('Project created successfully', 'success');
       }
       handleCloseModal();
       fetchProjects();
     } catch (err) {
       console.error('Error saving project:', err);
-      alert(err.response?.data?.message || 'Failed to save project');
+      showNotification(err.response?.data?.message || 'Failed to save project', 'error');
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this project?')) {
-      try {
-        await projectService.delete(id);
-        alert('Project deleted successfully');
-        fetchProjects();
-      } catch (err) {
-        console.error('Error deleting project:', err);
-        alert('Failed to delete project');
-      }
+  const handleDeleteClick = (id) => {
+    setConfirmDelete({ show: true, projectId: id });
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      await projectService.delete(confirmDelete.projectId);
+      showNotification('Project deleted successfully', 'success');
+      setConfirmDelete({ show: false, projectId: null });
+      fetchProjects();
+    } catch (err) {
+      console.error('Error deleting project:', err);
+      showNotification('Failed to delete project', 'error');
+      setConfirmDelete({ show: false, projectId: null });
     }
   };
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US');
+  const handleCancelDelete = () => {
+    setConfirmDelete({ show: false, projectId: null });
   };
 
   return (
     <AdminLayout>
       <div className="admin-projects">
-        <div className="page-header">
-          <h1>Manage Projects</h1>
-          <button className="btn btn-primary" onClick={() => handleOpenModal()}>
-            <FaPlus /> Add Project
-          </button>
-        </div>
-
-        {loading ? (
-          <div className="loading">Loading projects...</div>
-        ) : (
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Location</th>
-                  <th>Status</th>
-                  <th>Start Date</th>
-                  <th>Active</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.length === 0 ? (
-                  <tr>
-                    <td colSpan="6" className="no-data">No projects found</td>
-                  </tr>
-                ) : (
-                  projects.map((project) => (
-                    <tr key={project._id}>
-                      <td>{project.title}</td>
-                      <td>{project.location}</td>
-                      <td>
-                        <span className={`status-badge ${project.status}`}>
-                          {project.status}
-                        </span>
-                      </td>
-                      <td>{formatDate(project.startDate)}</td>
-                      <td>
-                        <span className={`status-badge ${project.isActive ? 'active' : 'inactive'}`}>
-                          {project.isActive ? 'Yes' : 'No'}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="action-buttons">
-                          <button 
-                            className="btn btn-edit" 
-                            onClick={() => handleOpenModal(project)}
-                            title="Edit"
-                          >
-                            <FaEdit />
-                          </button>
-                          <button 
-                            className="btn btn-delete" 
-                            onClick={() => handleDelete(project._id)}
-                            title="Delete"
-                          >
-                            <FaTrash />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+        <div className="projects-container">
+          <div className="projects-header">
+            <h1>Manage Projects</h1>
+            <button className="btn-primary" onClick={() => handleOpenModal()}>
+              <FaPlus /> Add Project
+            </button>
           </div>
-        )}
+
+          <div className="projects-content">
+            {loading ? (
+              <div className="loading">Loading projects...</div>
+            ) : projects.length === 0 ? (
+              <div className="no-projects">No projects found</div>
+            ) : (
+              <div className="projects-grid">
+                {projects.map((project) => (
+                  <div key={project._id} className="project-card">
+                    <div className="project-card-header">
+                      <h3>{project.title}</h3>
+                      <div className="project-actions">
+                        <button 
+                          className="action-btn edit-btn" 
+                          onClick={() => handleOpenModal(project)}
+                          title="Edit"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button 
+                          className="action-btn delete-btn" 
+                          onClick={() => handleDeleteClick(project._id)}
+                          title="Delete"
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </div>
+                    <p className="project-description">{project.description}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Modal */}
         {showModal && (
           <div className="modal-overlay" onClick={handleCloseModal}>
             <div className="modal-content modal-large" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header">
-                <h2>{editingProject ? 'Edit Project' : 'Add Project'}</h2>
+                <h2>{editingProject ? 'Edit Project' : 'Add New Project'}</h2>
                 <button className="close-btn" onClick={handleCloseModal}>
                   <FaTimes />
                 </button>
@@ -276,26 +298,18 @@ const AdminProjects = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Image URL</label>
+                  <label>Project Image</label>
                   <input
-                    type="url"
-                    name="imageUrl"
-                    value={formData.imageUrl}
+                    type="file"
+                    name="image"
                     onChange={handleChange}
-                    placeholder="https://example.com/image.jpg"
+                    accept="image/*"
                   />
-                </div>
-
-                <div className="form-group">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="isActive"
-                      checked={formData.isActive}
-                      onChange={handleChange}
-                    />
-                    {' '}Active
-                  </label>
+                  {formData.imagePreview && (
+                    <div className="image-preview">
+                      <img src={formData.imagePreview} alt="Preview" />
+                    </div>
+                  )}
                 </div>
 
                 <div className="modal-actions">
@@ -308,6 +322,35 @@ const AdminProjects = () => {
                 </div>
               </form>
             </div>
+          </div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {confirmDelete.show && (
+          <div className="modal-overlay" onClick={handleCancelDelete}>
+            <div className="modal-content modal-confirm" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h2>Delete Project</h2>
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to delete this project? This action cannot be undone.</p>
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="btn btn-secondary" onClick={handleCancelDelete}>
+                  Cancel
+                </button>
+                <button type="button" className="btn btn-danger" onClick={handleConfirmDelete}>
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Notification */}
+        {notification.show && (
+          <div className={`notification notification-${notification.type}`}>
+            <p>{notification.message}</p>
           </div>
         )}
       </div>

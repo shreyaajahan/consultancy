@@ -168,7 +168,7 @@
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 28px;
 }
 
 .form-group {
@@ -178,21 +178,25 @@
 .input-wrapper {
   position: relative;
   display: flex;
+  padding: 16px 20px 16px 50px;
   align-items: center;
 }
 
 .input-icon {
   position: absolute;
-  left: 16px;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
   color: #a0aec0;
-  font-size: 16px;
+  font-size: 25px;
   pointer-events: none;
   transition: color 0.3s ease;
 }
 
+
 .input-wrapper input {
   width: 100%;
-  padding: 14px 16px 14px 48px;
+  padding: 16px 20px 16px 72px;
   border: 2px solid #e2e8f0;
   border-radius: 8px;
   font-size: 15px;
