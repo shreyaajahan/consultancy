@@ -8,7 +8,6 @@ const AdminLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const admin = authService.getAdmin();
 
   const handleLogout = () => {
     authService.logout();
