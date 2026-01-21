@@ -81,15 +81,23 @@ const getProjectById = async (req, res) => {
 // @access  Private
 const createProject = async (req, res) => {
   try {
-    const { title, description, location, status, startDate, endDate, imageUrl } = req.body;
+    const { title, description, location, status, startDate, endDate } = req.body;
+
+    // Debug logging
+    console.log('Received body:', req.body);
+    console.log('Received file:', req.file);
 
     // Validation
     if (!title || !description || !location || !startDate) {
+      console.log('Validation failed:', { title, description, location, startDate });
       return res.status(400).json({
         success: false,
         message: 'Please provide all required fields'
       });
     }
+
+    // Get image URL from uploaded file
+    const imageUrl = req.file ? req.file.path : null;
 
     const project = await Project.create({
       title,
@@ -120,7 +128,7 @@ const createProject = async (req, res) => {
 // @access  Private
 const updateProject = async (req, res) => {
   try {
-    const { title, description, location, status, startDate, endDate, imageUrl, isActive } = req.body;
+    const { title, description, location, status, startDate, endDate, isActive } = req.body;
 
     let project = await Project.findById(req.params.id);
 
@@ -131,6 +139,9 @@ const updateProject = async (req, res) => {
       });
     }
 
+    // Get image URL from uploaded file if present
+    const imageUrl = req.file ? req.file.path : undefined;
+
     // Update fields
     project.title = title || project.title;
     project.description = description || project.description;
@@ -138,7 +149,9 @@ const updateProject = async (req, res) => {
     project.status = status || project.status;
     project.startDate = startDate || project.startDate;
     project.endDate = endDate || project.endDate;
-    project.imageUrl = imageUrl !== undefined ? imageUrl : project.imageUrl;
+    if (imageUrl !== undefined) {
+      project.imageUrl = imageUrl;
+    }
     if (typeof isActive !== 'undefined') {
       project.isActive = isActive;
     }
