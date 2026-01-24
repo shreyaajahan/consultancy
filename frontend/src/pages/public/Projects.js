@@ -11,28 +11,6 @@ const Projects = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-<<<<<<< Updated upstream
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setLoading(true);
-        const status = filter === 'all' ? null : filter;
-        const response = await projectService.getAll(status, currentPage);
-        setProjects(response.data || []);
-        setTotalPages(response.totalPages || 1);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching projects:', err);
-        setError('Failed to load projects. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, [filter, currentPage]);
-=======
 
   const fetchProjects = useCallback(async () => {
     try {
@@ -53,7 +31,6 @@ const Projects = () => {
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
->>>>>>> Stashed changes
 
   const handleFilterChange = (value) => {
     setFilter(value);
