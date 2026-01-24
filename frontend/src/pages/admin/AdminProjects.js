@@ -11,6 +11,8 @@ const AdminProjects = () => {
   const [editingProject, setEditingProject] = useState(null);
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
   const [confirmDelete, setConfirmDelete] = useState({ show: false, projectId: null });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -33,19 +35,25 @@ const AdminProjects = () => {
   const fetchProjects = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await projectService.getAllAdmin();
-      setProjects(response.data);
+      const response = await projectService.getAllAdmin(currentPage);
+      setProjects(response.data || []);
+      setTotalPages(response.totalPages || 1);
     } catch (err) {
       console.error('Error fetching projects:', err);
       showNotification('Failed to fetch projects', 'error');
     } finally {
       setLoading(false);
     }
-  }, [showNotification]);
+  }, [currentPage, showNotification]);
 
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
 
   const handleOpenModal = (project = null) => {
     if (project) {
@@ -123,12 +131,6 @@ const AdminProjects = () => {
       
       if (formData.image) {
         submitFormData.append('image', formData.image);
-      }
-
-      // Debug: Log FormData contents
-      console.log('FormData contents:');
-      for (let [key, value] of submitFormData.entries()) {
-        console.log(`${key}:`, value);
       }
 
       if (editingProject) {
@@ -209,6 +211,36 @@ const AdminProjects = () => {
                     <p className="project-description">{project.description}</p>
                   </div>
                 ))}
+              </div>
+            )}
+            {!loading && projects.length > 0 && totalPages > 1 && (
+              <div className="pagination">
+                <button
+                  className="page-btn"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                {[...Array(totalPages)].map((_, idx) => {
+                  const pageNumber = idx + 1;
+                  return (
+                    <button
+                      key={pageNumber}
+                      className={`page-btn ${currentPage === pageNumber ? 'active' : ''}`}
+                      onClick={() => handlePageChange(pageNumber)}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+                <button
+                  className="page-btn"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
               </div>
             )}
           </div>

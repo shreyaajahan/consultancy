@@ -191,6 +191,44 @@
   margin: 0;
 }
 
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  min-width: 40px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e1e4e8;
+  background: white;
+  color: #2c3e50;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+  border-color: #e67e22;
+  color: #d35400;
+  box-shadow: 0 6px 16px rgba(230, 126, 34, 0.2);
+}
+
+.page-btn.active {
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+  color: white;
+  border-color: #d35400;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Modal Styles */
 .modal-overlay {
   position: fixed;

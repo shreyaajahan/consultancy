@@ -66,14 +66,22 @@ export const serviceService = {
 
 // Project Services
 export const projectService = {
-  getAll: async (status) => {
-    const params = status ? `?status=${status}` : '';
-    const response = await api.get(`/projects${params}`);
+  getAll: async (status, page = 1, limit = 6) => {
+    const params = new URLSearchParams();
+    if (status) params.append('status', status);
+    if (page) params.append('page', page);
+    if (limit) params.append('limit', limit);
+    const query = params.toString();
+    const response = await api.get(`/projects${query ? `?${query}` : ''}`);
     return response.data;
   },
 
-  getAllAdmin: async () => {
-    const response = await api.get('/projects/admin/all');
+  getAllAdmin: async (page = 1, limit = 6) => {
+    const params = new URLSearchParams();
+    if (page) params.append('page', page);
+    if (limit) params.append('limit', limit);
+    const query = params.toString();
+    const response = await api.get(`/projects/admin/all${query ? `?${query}` : ''}`);
     return response.data;
   },
 

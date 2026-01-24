@@ -9,14 +9,17 @@ const Projects = () => {
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         setLoading(true);
         const status = filter === 'all' ? null : filter;
-        const response = await projectService.getAll(status);
-        setProjects(response.data);
+        const response = await projectService.getAll(status, currentPage);
+        setProjects(response.data || []);
+        setTotalPages(response.totalPages || 1);
         setError(null);
       } catch (err) {
         console.error('Error fetching projects:', err);
@@ -27,7 +30,18 @@ const Projects = () => {
     };
 
     fetchProjects();
-  }, [filter]);
+  }, [filter, currentPage]);
+
+  const handleFilterChange = (value) => {
+    setFilter(value);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Present';
@@ -73,19 +87,19 @@ const Projects = () => {
             <div className="filter-buttons">
               <button 
                 className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
-                onClick={() => setFilter('all')}
+                onClick={() => handleFilterChange('all')}
               >
                 All Projects
               </button>
               <button 
                 className={`filter-btn ${filter === 'ongoing' ? 'active' : ''}`}
-                onClick={() => setFilter('ongoing')}
+                onClick={() => handleFilterChange('ongoing')}
               >
                 Ongoing
               </button>
               <button 
                 className={`filter-btn ${filter === 'completed' ? 'active' : ''}`}
-                onClick={() => setFilter('completed')}
+                onClick={() => handleFilterChange('completed')}
               >
                 Completed
               </button>
@@ -126,6 +140,36 @@ const Projects = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+            {!loading && !error && projects.length > 0 && totalPages > 1 && (
+              <div className="pagination">
+                <button 
+                  className="page-btn"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                {[...Array(totalPages)].map((_, idx) => {
+                  const pageNumber = idx + 1;
+                  return (
+                    <button
+                      key={pageNumber}
+                      className={`page-btn ${currentPage === pageNumber ? 'active' : ''}`}
+                      onClick={() => handlePageChange(pageNumber)}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+                <button 
+                  className="page-btn"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
               </div>
             )}
           </div>
