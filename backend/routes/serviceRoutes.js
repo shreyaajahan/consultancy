@@ -12,10 +12,14 @@ const authMiddleware = require('../middleware/auth');
 
 // Public routes
 router.get('/', getServices);
-router.get('/:id', getServiceById);
 
 // Protected routes (admin only)
 router.get('/admin/all', authMiddleware, getAllServices);
+
+// Public routes (specific by id)
+router.get('/:id', getServiceById);
+
+// Protected routes (admin only) - create, update, delete
 router.post('/', authMiddleware, createService);
 router.put('/:id', authMiddleware, updateService);
 router.delete('/:id', authMiddleware, deleteService);
