@@ -5,11 +5,22 @@ const Service = require('../models/Service');
 // @access  Public
 const getServices = async (req, res) => {
   try {
-    const services = await Service.find({ isActive: true }).sort({ createdAt: -1 });
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 6;
+    const skip = (page - 1) * limit;
+
+    const total = await Service.countDocuments({ isActive: true });
+    const services = await Service.find({ isActive: true })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
     
     res.json({
       success: true,
       count: services.length,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit) || 1,
       data: services
     });
   } catch (error) {
@@ -26,11 +37,22 @@ const getServices = async (req, res) => {
 // @access  Private
 const getAllServices = async (req, res) => {
   try {
-    const services = await Service.find().sort({ createdAt: -1 });
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 6;
+    const skip = (page - 1) * limit;
+
+    const total = await Service.countDocuments();
+    const services = await Service.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
     
     res.json({
       success: true,
       count: services.length,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit) || 1,
       data: services
     });
   } catch (error) {
