@@ -6,17 +6,27 @@ const Project = require('../models/Project');
 const getProjects = async (req, res) => {
   try {
     const { status } = req.query;
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 6;
+    const skip = (page - 1) * limit;
     
     let query = { isActive: true };
     if (status && ['ongoing', 'completed'].includes(status)) {
       query.status = status;
     }
 
-    const projects = await Project.find(query).sort({ createdAt: -1 });
+    const total = await Project.countDocuments(query);
+    const projects = await Project.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
     
     res.json({
       success: true,
       count: projects.length,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit) || 1,
       data: projects
     });
   } catch (error) {
@@ -33,11 +43,22 @@ const getProjects = async (req, res) => {
 // @access  Private
 const getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.find().sort({ createdAt: -1 });
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 6;
+    const skip = (page - 1) * limit;
+
+    const total = await Project.countDocuments();
+    const projects = await Project.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
     
     res.json({
       success: true,
       count: projects.length,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit) || 1,
       data: projects
     });
   } catch (error) {
@@ -83,13 +104,8 @@ const createProject = async (req, res) => {
   try {
     const { title, description, location, status, startDate, endDate } = req.body;
 
-    // Debug logging
-    console.log('Received body:', req.body);
-    console.log('Received file:', req.file);
-
     // Validation
     if (!title || !description || !location || !startDate) {
-      console.log('Validation failed:', { title, description, location, startDate });
       return res.status(400).json({
         success: false,
         message: 'Please provide all required fields'
