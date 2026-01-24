@@ -244,15 +244,10 @@
 .pagination {
   display: flex;
   justify-content: center;
-<<<<<<< Updated upstream
-  gap: 12px;
-  margin-top: 36px;
-=======
   align-items: center;
   gap: 12px;
   margin-top: 48px;
   margin-bottom: 20px;
->>>>>>> Stashed changes
   flex-wrap: wrap;
 }
 
@@ -260,14 +255,6 @@
   min-width: 44px;
   padding: 10px 14px;
   border-radius: 10px;
-<<<<<<< Updated upstream
-  border: 1px solid #e5e7eb;
-  background: #ffffff;
-  color: var(--dark-color);
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 200ms ease;
-=======
   border: 2px solid #e5e7eb;
   background: #ffffff;
   color: var(--dark-color);
@@ -277,27 +264,20 @@
   transition: all 200ms ease;
   letter-spacing: 0.3px;
   font-family: 'Space Grotesk', 'Montserrat', 'Segoe UI', sans-serif;
->>>>>>> Stashed changes
 }
 
 .page-btn:hover:not(:disabled) {
   border-color: var(--primary-color);
   color: var(--primary-color);
   box-shadow: 0 8px 20px rgba(245, 158, 11, 0.18);
-<<<<<<< Updated upstream
-=======
   transform: translateY(-2px);
->>>>>>> Stashed changes
 }
 
 .page-btn.active {
   background: var(--primary-color);
   color: #ffffff;
   border-color: var(--primary-color);
-<<<<<<< Updated upstream
-=======
   box-shadow: 0 12px 28px rgba(245, 158, 11, 0.28);
->>>>>>> Stashed changes
 }
 
 .page-btn:disabled {
@@ -305,14 +285,11 @@
   cursor: not-allowed;
 }
 
-<<<<<<< Updated upstream
-=======
 .page-btn:disabled:hover {
   transform: none;
   box-shadow: none;
 }
 
->>>>>>> Stashed changes
 /* Responsive */
 @media (max-width: 1100px) {
   .services-page .glass-panel h1 {

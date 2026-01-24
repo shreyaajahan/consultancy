@@ -145,38 +145,6 @@ const AdminServices = () => {
                   ))}
                 </div>
               )}
-<<<<<<< Updated upstream
-                  {!loading && services.length > 0 && totalPages > 1 && (
-                    <div className="pagination">
-                      <button
-                        className="page-btn"
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                      >
-                        Prev
-                      </button>
-                      {[...Array(totalPages)].map((_, idx) => {
-                        const pageNumber = idx + 1;
-                        return (
-                          <button
-                            key={pageNumber}
-                            className={`page-btn ${currentPage === pageNumber ? 'active' : ''}`}
-                            onClick={() => handlePageChange(pageNumber)}
-                          >
-                            {pageNumber}
-                          </button>
-                        );
-                      })}
-                      <button
-                        className="page-btn"
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                      >
-                        Next
-                      </button>
-                    </div>
-                  )}
-=======
               {!loading && services.length > 0 && totalPages > 1 && (
                 <div className="pagination">
                   <button
@@ -207,7 +175,6 @@ const AdminServices = () => {
                   </button>
                 </div>
               )}
->>>>>>> Stashed changes
             </div>
           )}
         </div>

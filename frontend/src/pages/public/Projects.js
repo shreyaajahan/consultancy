@@ -5,20 +5,19 @@ import { FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
 import '../../styles/Projects.css';
 
 const Projects = () => {
-  const [projects, setProjects] = useState([]);
+  const [allProjects, setAllProjects] = useState([]);
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 6;
 
   const fetchProjects = useCallback(async () => {
     try {
       setLoading(true);
       const status = filter === 'all' ? null : filter;
-      const response = await projectService.getAll(status, currentPage);
-      setProjects(response.data || []);
-      setTotalPages(response.totalPages || 1);
+      const response = await projectService.getAll(status);
+      setAllProjects(response.data || []);
       setError(null);
     } catch (err) {
       console.error('Error fetching projects:', err);
@@ -26,11 +25,17 @@ const Projects = () => {
     } finally {
       setLoading(false);
     }
-  }, [filter, currentPage]);
+  }, [filter]);
 
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(allProjects.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const projects = allProjects.slice(startIndex, endIndex);
 
   const handleFilterChange = (value) => {
     setFilter(value);

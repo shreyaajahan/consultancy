@@ -5,18 +5,17 @@ import { FaTools } from 'react-icons/fa';
 import '../../styles/Services.css';
 
 const Services = () => {
-  const [services, setServices] = useState([]);
+  const [allServices, setAllServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 6;
 
   const fetchServices = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await serviceService.getAll(currentPage);
-      setServices(response.data || []);
-      setTotalPages(response.totalPages || 1);
+      const response = await serviceService.getAll();
+      setAllServices(response.data || []);
       setError(null);
     } catch (err) {
       console.error('Error fetching services:', err);
@@ -24,11 +23,17 @@ const Services = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage]);
+  }, []);
 
   useEffect(() => {
     fetchServices();
   }, [fetchServices]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(allServices.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const services = allServices.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
