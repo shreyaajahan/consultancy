@@ -33,13 +33,21 @@ export const authService = {
 
 // Service Services
 export const serviceService = {
-  getAll: async () => {
-    const response = await api.get('/services');
+  getAll: async (page = 1, limit = 6) => {
+    const params = new URLSearchParams();
+    if (page) params.append('page', page);
+    if (limit) params.append('limit', limit);
+    const query = params.toString();
+    const response = await api.get(`/services${query ? `?${query}` : ''}`);
     return response.data;
   },
 
-  getAllAdmin: async () => {
-    const response = await api.get('/services/admin/all');
+  getAllAdmin: async (page = 1, limit = 6) => {
+    const params = new URLSearchParams();
+    if (page) params.append('page', page);
+    if (limit) params.append('limit', limit);
+    const query = params.toString();
+    const response = await api.get(`/services/admin/all${query ? `?${query}` : ''}`);
     return response.data;
   },
 
