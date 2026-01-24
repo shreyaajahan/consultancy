@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { serviceService } from '../../services/apiServices';
 import { FaPlus, FaEdit, FaTrash, FaTimes } from 'react-icons/fa';
 import '../../styles/AdminServices.css';
 
 const AdminServices = () => {
-  const [services, setServices] = useState([]);
+  const [allServices, setAllServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingService, setEditingService] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -16,21 +18,31 @@ const AdminServices = () => {
     isActive: true
   });
 
-  useEffect(() => {
-    fetchServices();
-  }, []);
-
-  const fetchServices = async () => {
+  const fetchServices = useCallback(async () => {
     try {
       setLoading(true);
       const response = await serviceService.getAllAdmin();
-      setServices(response.data);
+      setAllServices(response.data || []);
     } catch (err) {
       console.error('Error fetching services:', err);
       alert('Failed to fetch services');
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    fetchServices();
+  }, [fetchServices]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(allServices.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const services = allServices.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
   };
 
   const handleOpenModal = (service = null) => {
@@ -135,6 +147,36 @@ const AdminServices = () => {
                       <p className="service-description">{service.description}</p>
                     </div>
                   ))}
+                </div>
+              )}
+              {!loading && services.length > 0 && totalPages > 1 && (
+                <div className="pagination">
+                  <button
+                    className="page-btn"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    Prev
+                  </button>
+                  {[...Array(totalPages)].map((_, idx) => {
+                    const pageNumber = idx + 1;
+                    return (
+                      <button
+                        key={pageNumber}
+                        className={`page-btn ${currentPage === pageNumber ? 'active' : ''}`}
+                        onClick={() => handlePageChange(pageNumber)}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
+                  <button
+                    className="page-btn"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
                 </div>
               )}
             </div>

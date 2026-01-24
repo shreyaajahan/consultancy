@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Layout from '../../components/public/Layout';
 import { serviceService } from '../../services/apiServices';
 import { FaTools } from 'react-icons/fa';
 import '../../styles/Services.css';
 
 const Services = () => {
-  const [services, setServices] = useState([]);
+  const [allServices, setAllServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
-  useEffect(() => {
-    fetchServices();
-  }, []);
-
-  const fetchServices = async () => {
+  const fetchServices = useCallback(async () => {
     try {
       setLoading(true);
       const response = await serviceService.getAll();
-      setServices(response.data);
+      setAllServices(response.data || []);
       setError(null);
     } catch (err) {
       console.error('Error fetching services:', err);
@@ -25,6 +23,22 @@ const Services = () => {
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    fetchServices();
+  }, [fetchServices]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(allServices.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const services = allServices.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -78,6 +92,36 @@ const Services = () => {
                     <p>{service.description}</p>
                   </div>
                 ))}
+              </div>
+            )}
+            {!loading && !error && services.length > 0 && totalPages > 1 && (
+              <div className="pagination">
+                <button
+                  className="page-btn"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                {[...Array(totalPages)].map((_, idx) => {
+                  const pageNumber = idx + 1;
+                  return (
+                    <button
+                      key={pageNumber}
+                      className={`page-btn ${currentPage === pageNumber ? 'active' : ''}`}
+                      onClick={() => handlePageChange(pageNumber)}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+                <button
+                  className="page-btn"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
               </div>
             )}
           </div>

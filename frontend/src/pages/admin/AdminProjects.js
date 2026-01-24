@@ -5,12 +5,14 @@ import { FaPlus, FaEdit, FaTrash, FaTimes } from 'react-icons/fa';
 import '../../styles/AdminProjects.css';
 
 const AdminProjects = () => {
-  const [projects, setProjects] = useState([]);
+  const [allProjects, setAllProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
   const [confirmDelete, setConfirmDelete] = useState({ show: false, projectId: null });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -34,7 +36,7 @@ const AdminProjects = () => {
     try {
       setLoading(true);
       const response = await projectService.getAllAdmin();
-      setProjects(response.data);
+      setAllProjects(response.data || []);
     } catch (err) {
       console.error('Error fetching projects:', err);
       showNotification('Failed to fetch projects', 'error');
@@ -46,6 +48,16 @@ const AdminProjects = () => {
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(allProjects.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const projects = allProjects.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
 
   const handleOpenModal = (project = null) => {
     if (project) {
@@ -123,12 +135,6 @@ const AdminProjects = () => {
       
       if (formData.image) {
         submitFormData.append('image', formData.image);
-      }
-
-      // Debug: Log FormData contents
-      console.log('FormData contents:');
-      for (let [key, value] of submitFormData.entries()) {
-        console.log(`${key}:`, value);
       }
 
       if (editingProject) {
@@ -209,6 +215,36 @@ const AdminProjects = () => {
                     <p className="project-description">{project.description}</p>
                   </div>
                 ))}
+              </div>
+            )}
+            {!loading && projects.length > 0 && totalPages > 1 && (
+              <div className="pagination">
+                <button
+                  className="page-btn"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                {[...Array(totalPages)].map((_, idx) => {
+                  const pageNumber = idx + 1;
+                  return (
+                    <button
+                      key={pageNumber}
+                      className={`page-btn ${currentPage === pageNumber ? 'active' : ''}`}
+                      onClick={() => handlePageChange(pageNumber)}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+                <button
+                  className="page-btn"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
               </div>
             )}
           </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from 'react-icons/fa';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import '../../styles/Footer.css';
 
 const Footer = () => {
@@ -14,9 +14,9 @@ const Footer = () => {
             <h3>Nivas Constructions</h3>
             <p>Building dreams, creating realities. Your trusted partner in construction excellence.</p>
             <div className="social-links">
-              <a href="#" aria-label="Facebook"><FaFacebook /></a>
-              <a href="#" aria-label="Instagram"><FaInstagram /></a>
-              <a href="#" aria-label="LinkedIn"><FaLinkedin /></a>
+              <button type="button" aria-label="Facebook" onClick={() => console.log('Facebook link')} className="social-button"><FaFacebook /></button>
+              <button type="button" aria-label="Instagram" onClick={() => console.log('Instagram link')} className="social-button"><FaInstagram /></button>
+              <button type="button" aria-label="LinkedIn" onClick={() => console.log('LinkedIn link')} className="social-button"><FaLinkedin /></button>
             </div>
           </div>
 
