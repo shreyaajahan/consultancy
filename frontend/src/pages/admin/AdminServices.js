@@ -5,12 +5,12 @@ import { FaPlus, FaEdit, FaTrash, FaTimes } from 'react-icons/fa';
 import '../../styles/AdminServices.css';
 
 const AdminServices = () => {
-  const [services, setServices] = useState([]);
+  const [allServices, setAllServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingService, setEditingService] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 6;
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -21,20 +21,24 @@ const AdminServices = () => {
   const fetchServices = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await serviceService.getAllAdmin(currentPage);
-      setServices(response.data || []);
-      setTotalPages(response.totalPages || 1);
+      const response = await serviceService.getAllAdmin();
+      setAllServices(response.data || []);
     } catch (err) {
       console.error('Error fetching services:', err);
       alert('Failed to fetch services');
     } finally {
       setLoading(false);
     }
-  }, [currentPage]);
+  }, []);
 
   useEffect(() => {
     fetchServices();
   }, [fetchServices]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(allServices.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const services = allServices.slice(startIndex, startIndex + itemsPerPage);
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;

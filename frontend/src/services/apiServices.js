@@ -33,21 +33,13 @@ export const authService = {
 
 // Service Services
 export const serviceService = {
-  getAll: async (page = 1, limit = 6) => {
-    const params = new URLSearchParams();
-    if (page) params.append('page', page);
-    if (limit) params.append('limit', limit);
-    const query = params.toString();
-    const response = await api.get(`/services${query ? `?${query}` : ''}`);
+  getAll: async () => {
+    const response = await api.get('/services?limit=1000');
     return response.data;
   },
 
-  getAllAdmin: async (page = 1, limit = 6) => {
-    const params = new URLSearchParams();
-    if (page) params.append('page', page);
-    if (limit) params.append('limit', limit);
-    const query = params.toString();
-    const response = await api.get(`/services/admin/all${query ? `?${query}` : ''}`);
+  getAllAdmin: async () => {
+    const response = await api.get('/services/admin/all?limit=1000');
     return response.data;
   },
 
@@ -74,22 +66,14 @@ export const serviceService = {
 
 // Project Services
 export const projectService = {
-  getAll: async (status, page = 1, limit = 6) => {
-    const params = new URLSearchParams();
-    if (status) params.append('status', status);
-    if (page) params.append('page', page);
-    if (limit) params.append('limit', limit);
-    const query = params.toString();
-    const response = await api.get(`/projects${query ? `?${query}` : ''}`);
+  getAll: async (status) => {
+    const params = status ? `?status=${status}&limit=1000` : '?limit=1000';
+    const response = await api.get(`/projects${params}`);
     return response.data;
   },
 
-  getAllAdmin: async (page = 1, limit = 6) => {
-    const params = new URLSearchParams();
-    if (page) params.append('page', page);
-    if (limit) params.append('limit', limit);
-    const query = params.toString();
-    const response = await api.get(`/projects/admin/all${query ? `?${query}` : ''}`);
+  getAllAdmin: async () => {
+    const response = await api.get('/projects/admin/all?limit=1000');
     return response.data;
   },
 

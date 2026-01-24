@@ -5,14 +5,14 @@ import { FaPlus, FaEdit, FaTrash, FaTimes } from 'react-icons/fa';
 import '../../styles/AdminProjects.css';
 
 const AdminProjects = () => {
-  const [projects, setProjects] = useState([]);
+  const [allProjects, setAllProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
   const [confirmDelete, setConfirmDelete] = useState({ show: false, projectId: null });
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 6;
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -35,20 +35,24 @@ const AdminProjects = () => {
   const fetchProjects = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await projectService.getAllAdmin(currentPage);
-      setProjects(response.data || []);
-      setTotalPages(response.totalPages || 1);
+      const response = await projectService.getAllAdmin();
+      setAllProjects(response.data || []);
     } catch (err) {
       console.error('Error fetching projects:', err);
       showNotification('Failed to fetch projects', 'error');
     } finally {
       setLoading(false);
     }
-  }, [currentPage, showNotification]);
+  }, [showNotification]);
 
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(allProjects.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const projects = allProjects.slice(startIndex, startIndex + itemsPerPage);
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
