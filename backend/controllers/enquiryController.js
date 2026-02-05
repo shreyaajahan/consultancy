@@ -1,4 +1,5 @@
 const Enquiry = require('../models/Enquiry');
+const { sendEmail } = require('../config/email');
 
 // @desc    Get all enquiries
 // @route   GET /api/enquiries
@@ -167,6 +168,144 @@ const deleteEnquiry = async (req, res) => {
   }
 };
 
+// @desc    Send reply to enquiry
+// @route   POST /api/enquiries/:id/reply
+// @access  Private (Admin only)
+const sendReply = async (req, res) => {
+  try {
+    const { reply } = req.body;
+
+    if (!reply || reply.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: 'Reply message cannot be empty'
+      });
+    }
+
+    let enquiry = await Enquiry.findById(req.params.id);
+
+    if (!enquiry) {
+      return res.status(404).json({
+        success: false,
+        message: 'Enquiry not found'
+      });
+    }
+
+    enquiry.reply = reply;
+    enquiry.repliedAt = new Date();
+    enquiry.status = 'resolved';
+
+    await enquiry.save();
+
+    // Send email to customer
+    try {
+      const emailHTML = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background-color: #f0f8ff; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
+            <h2 style="color: #333; margin: 0;">We have replied to your enquiry!</h2>
+          </div>
+          
+          <div style="margin-bottom: 20px;">
+            <h3 style="color: #333;">Hi ${enquiry.name},</h3>
+            <p style="color: #666; line-height: 1.6;">Thank you for contacting us. We have reviewed your enquiry and have the following response:</p>
+          </div>
+
+          <div style="background-color: #f5f5f5; padding: 20px; border-left: 4px solid #ff9933; margin-bottom: 20px; border-radius: 5px;">
+            <h4 style="color: #333; margin-top: 0;">Your Enquiry:</h4>
+            <p style="color: #666; margin: 0;"><strong>Subject:</strong> ${enquiry.subject}</p>
+            <p style="color: #666; margin: 10px 0 0 0;"><strong>Your Message:</strong></p>
+            <p style="color: #666; margin: 10px 0;">${enquiry.message}</p>
+          </div>
+
+          <div style="background-color: #e8f5e9; padding: 20px; border-left: 4px solid #4caf50; margin-bottom: 20px; border-radius: 5px;">
+            <h4 style="color: #2e7d32; margin-top: 0;">Our Reply:</h4>
+            <p style="color: #555; line-height: 1.6;">${reply}</p>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <p style="color: #666;">If you have any further questions, please feel free to contact us.</p>
+          </div>
+
+          <div style="border-top: 1px solid #ddd; padding-top: 20px; color: #999; font-size: 12px;">
+            <p style="margin: 0;">Best regards,</p>
+            <p style="margin: 5px 0;">Nivas Constructions</p>
+            <p style="margin: 5px 0;">© 2026 All rights reserved.</p>
+          </div>
+        </div>
+      `;
+
+      await sendEmail(
+        enquiry.email,
+        `Reply to Your Enquiry: ${enquiry.subject}`,
+        emailHTML
+      );
+    } catch (emailError) {
+      console.error('Error sending reply email:', emailError);
+      // Don't fail the API call if email fails
+    }
+
+    res.json({
+      success: true,
+      message: 'Reply sent successfully',
+      data: enquiry
+    });
+  } catch (error) {
+    console.error('Send reply error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+};
+
+// @desc    Get reply for customer (public endpoint)
+// @route   GET /api/enquiries/reply/:email/:id
+// @access  Public
+const getReply = async (req, res) => {
+  try {
+    const { email, id } = req.params;
+
+    const enquiry = await Enquiry.findOne({
+      _id: id,
+      email: email.toLowerCase()
+    });
+
+    if (!enquiry) {
+      return res.status(404).json({
+        success: false,
+        message: 'Enquiry not found'
+      });
+    }
+
+    // Mark reply as read
+    if (enquiry.reply && !enquiry.replyRead) {
+      enquiry.replyRead = true;
+      await enquiry.save();
+    }
+
+    res.json({
+      success: true,
+      data: {
+        id: enquiry._id,
+        name: enquiry.name,
+        email: enquiry.email,
+        subject: enquiry.subject,
+        message: enquiry.message,
+        reply: enquiry.reply,
+        repliedAt: enquiry.repliedAt,
+        status: enquiry.status,
+        createdAt: enquiry.createdAt
+      }
+    });
+  } catch (error) {
+    console.error('Get reply error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+};
+
 // @desc    Get dashboard statistics
 // @route   GET /api/enquiries/stats
 // @access  Private
@@ -203,5 +342,7 @@ module.exports = {
   createEnquiry,
   updateEnquiry,
   deleteEnquiry,
+  sendReply,
+  getReply,
   getStats
 };

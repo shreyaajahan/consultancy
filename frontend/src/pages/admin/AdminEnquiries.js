@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { enquiryService } from '../../services/apiServices';
 import { FaEye, FaTrash, FaTimes, FaEnvelope, FaPhone, FaUser } from 'react-icons/fa';
@@ -10,12 +10,13 @@ const AdminEnquiries = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
   const [filterStatus, setFilterStatus] = useState('all');
+  const [replyText, setReplyText] = useState('');
+  const [replySending, setReplySending] = useState(false);
+  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteEnquiryId, setDeleteEnquiryId] = useState(null);
 
-  useEffect(() => {
-    fetchEnquiries();
-  }, [filterStatus]);
-
-  const fetchEnquiries = async () => {
+  const fetchEnquiries = useCallback(async () => {
     try {
       setLoading(true);
       const status = filterStatus === 'all' ? null : filterStatus;
@@ -27,7 +28,11 @@ const AdminEnquiries = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterStatus]);
+
+  useEffect(() => {
+    fetchEnquiries();
+  }, [fetchEnquiries]);
 
   const handleViewEnquiry = async (enquiry) => {
     setSelectedEnquiry(enquiry);
@@ -47,6 +52,7 @@ const AdminEnquiries = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedEnquiry(null);
+    setReplyText('');
   };
 
   const handleStatusChange = async (id, newStatus) => {
@@ -64,18 +70,54 @@ const AdminEnquiries = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this enquiry?')) {
-      try {
-        await enquiryService.delete(id);
-        alert('Enquiry deleted successfully');
-        fetchEnquiries();
-        if (showModal) {
-          handleCloseModal();
-        }
-      } catch (err) {
-        console.error('Error deleting enquiry:', err);
-        alert('Failed to delete enquiry');
+    setDeleteEnquiryId(id);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await enquiryService.delete(deleteEnquiryId);
+      setNotification({ show: true, message: 'Enquiry deleted successfully', type: 'success' });
+      setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+      fetchEnquiries();
+      setShowDeleteConfirm(false);
+      setDeleteEnquiryId(null);
+      if (showModal) {
+        handleCloseModal();
       }
+    } catch (err) {
+      console.error('Error deleting enquiry:', err);
+      setNotification({ show: true, message: 'Failed to delete enquiry', type: 'error' });
+      setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setDeleteEnquiryId(null);
+  };
+
+  const handleSendReply = async () => {
+    if (!replyText.trim()) {
+      setNotification({ show: true, message: 'Please enter a reply message', type: 'error' });
+      setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+      return;
+    }
+
+    try {
+      setReplySending(true);
+      await enquiryService.sendReply(selectedEnquiry._id, replyText);
+      setNotification({ show: true, message: `Reply sent successfully to ${selectedEnquiry.email}`, type: 'success' });
+      setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+      setReplyText('');
+      fetchEnquiries();
+      setTimeout(() => handleCloseModal(), 1500);
+    } catch (err) {
+      console.error('Error sending reply:', err);
+      setNotification({ show: true, message: 'Failed to send reply. Please try again.', type: 'error' });
+      setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+    } finally {
+      setReplySending(false);
     }
   };
 
@@ -250,7 +292,40 @@ const AdminEnquiries = () => {
                   </select>
                 </div>
 
+                {selectedEnquiry.reply && (
+                  <div className="detail-full reply-section">
+                    <label>Reply Sent</label>
+                    <div className="reply-box">
+                      <p>{selectedEnquiry.reply}</p>
+                      <small>Sent on: {formatDate(selectedEnquiry.repliedAt)}</small>
+                    </div>
+                  </div>
+                )}
+
+                {!selectedEnquiry.reply && (
+                  <div className="detail-full reply-section">
+                    <label>Send Reply</label>
+                    <textarea
+                      value={replyText}
+                      onChange={(e) => setReplyText(e.target.value)}
+                      placeholder="Enter your reply message here..."
+                      className="reply-textarea"
+                      rows="5"
+                      disabled={replySending}
+                    />
+                  </div>
+                )}
+
                 <div className="modal-actions">
+                  {!selectedEnquiry.reply && (
+                    <button 
+                      className="btn btn-primary" 
+                      onClick={handleSendReply}
+                      disabled={replySending}
+                    >
+                      {replySending ? 'Sending...' : 'Send Reply'}
+                    </button>
+                  )}
                   <button 
                     className="btn btn-delete" 
                     onClick={() => handleDelete(selectedEnquiry._id)}
@@ -263,6 +338,31 @@ const AdminEnquiries = () => {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirm && (
+          <div className="modal-overlay" onClick={() => setShowDeleteConfirm(false)}>
+            <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>
+              <h3>Delete Enquiry</h3>
+              <p>Are you sure you want to delete this enquiry? This action cannot be undone.</p>
+              <div className="confirm-actions">
+                <button className="btn btn-delete" onClick={confirmDelete}>
+                  Delete
+                </button>
+                <button className="btn btn-secondary" onClick={cancelDelete}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Notification Toast */}
+        {notification.show && (
+          <div className={`notification-toast notification-${notification.type}`}>
+            {notification.message}
           </div>
         )}
       </div>

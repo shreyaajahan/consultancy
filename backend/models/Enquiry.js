@@ -34,6 +34,18 @@ const enquirySchema = new mongoose.Schema({
   isRead: {
     type: Boolean,
     default: false
+  },
+  reply: {
+    type: String,
+    default: null
+  },
+  repliedAt: {
+    type: Date,
+    default: null
+  },
+  replyRead: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true

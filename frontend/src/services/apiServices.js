@@ -126,6 +126,11 @@ export const enquiryService = {
     return response.data;
   },
 
+  sendReply: async (id, reply) => {
+    const response = await api.post(`/enquiries/${id}/reply`, { reply });
+    return response.data;
+  },
+
   getStats: async () => {
     const response = await api.get('/enquiries/stats');
     return response.data;
