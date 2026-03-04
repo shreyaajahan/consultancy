@@ -134,95 +134,93 @@ const AdminEnquiries = () => {
   return (
     <AdminLayout>
       <div className="admin-enquiries">
-        <div className="page-header">
-          <h1>Manage Enquiries</h1>
-          <div className="filter-buttons">
-            <button 
-              className={`filter-btn ${filterStatus === 'all' ? 'active' : ''}`}
-              onClick={() => setFilterStatus('all')}
-            >
-              All
-            </button>
-            <button 
-              className={`filter-btn ${filterStatus === 'new' ? 'active' : ''}`}
-              onClick={() => setFilterStatus('new')}
-            >
-              New
-            </button>
-            <button 
-              className={`filter-btn ${filterStatus === 'in-progress' ? 'active' : ''}`}
-              onClick={() => setFilterStatus('in-progress')}
-            >
-              In Progress
-            </button>
-            <button 
-              className={`filter-btn ${filterStatus === 'resolved' ? 'active' : ''}`}
-              onClick={() => setFilterStatus('resolved')}
-            >
-              Resolved
-            </button>
+        <div className="enquiries-container">
+          <div className="enquiries-header">
+            <h1>Manage Enquiries</h1>
+            <div className="filter-buttons">
+              <button
+                className={`filter-btn ${filterStatus === 'all' ? 'active' : ''}`}
+                onClick={() => setFilterStatus('all')}
+              >
+                All
+              </button>
+              <button
+                className={`filter-btn ${filterStatus === 'new' ? 'active' : ''}`}
+                onClick={() => setFilterStatus('new')}
+              >
+                New
+              </button>
+              <button
+                className={`filter-btn ${filterStatus === 'resolved' ? 'active' : ''}`}
+                onClick={() => setFilterStatus('resolved')}
+              >
+                Resolved
+              </button>
+            </div>
+          </div>
+
+          <div className="enquiries-content">
+            {loading ? (
+              <div className="loading">Loading enquiries...</div>
+            ) : (
+              <div className="table-container">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Subject</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {enquiries.length === 0 ? (
+                      <tr>
+                        <td colSpan="7" className="no-data">No enquiries found</td>
+                      </tr>
+                    ) : (
+                      enquiries.map((enquiry) => (
+                        <tr key={enquiry._id} className={!enquiry.isRead ? 'unread' : ''}>
+                          <td>{enquiry.name}</td>
+                          <td>{enquiry.email}</td>
+                          <td>{enquiry.phone}</td>
+                          <td>{enquiry.subject}</td>
+                          <td>
+                            <span className={`status-badge ${enquiry.status}`}>
+                              {enquiry.status}
+                            </span>
+                          </td>
+                          <td>{formatDate(enquiry.createdAt)}</td>
+                          <td>
+                            <div className="action-buttons">
+                              <button
+                                className="btn btn-view"
+                                onClick={() => handleViewEnquiry(enquiry)}
+                                title="View"
+                              >
+                                <FaEye />
+                              </button>
+                              <button
+                                className="btn btn-delete"
+                                onClick={() => handleDelete(enquiry._id)}
+                                title="Delete"
+                              >
+                                <FaTrash />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
-
-        {loading ? (
-          <div className="loading">Loading enquiries...</div>
-        ) : (
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Subject</th>
-                  <th>Status</th>
-                  <th>Date</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {enquiries.length === 0 ? (
-                  <tr>
-                    <td colSpan="7" className="no-data">No enquiries found</td>
-                  </tr>
-                ) : (
-                  enquiries.map((enquiry) => (
-                    <tr key={enquiry._id} className={!enquiry.isRead ? 'unread' : ''}>
-                      <td>{enquiry.name}</td>
-                      <td>{enquiry.email}</td>
-                      <td>{enquiry.phone}</td>
-                      <td>{enquiry.subject}</td>
-                      <td>
-                        <span className={`status-badge ${enquiry.status}`}>
-                          {enquiry.status}
-                        </span>
-                      </td>
-                      <td>{formatDate(enquiry.createdAt)}</td>
-                      <td>
-                        <div className="action-buttons">
-                          <button 
-                            className="btn btn-view" 
-                            onClick={() => handleViewEnquiry(enquiry)}
-                            title="View"
-                          >
-                            <FaEye />
-                          </button>
-                          <button 
-                            className="btn btn-delete" 
-                            onClick={() => handleDelete(enquiry._id)}
-                            title="Delete"
-                          >
-                            <FaTrash />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
 
         {/* Modal */}
         {showModal && selectedEnquiry && (
@@ -287,7 +285,6 @@ const AdminEnquiries = () => {
                     className="status-select"
                   >
                     <option value="new">New</option>
-                    <option value="in-progress">In Progress</option>
                     <option value="resolved">Resolved</option>
                   </select>
                 </div>
