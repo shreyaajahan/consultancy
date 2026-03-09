@@ -1,6 +1,16 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const normalizeApiUrl = (url) => {
+  const fallbackUrl = 'http://localhost:5000/api';
+  if (!url) return fallbackUrl;
+
+  const trimmed = url.trim().replace(/\/+$/, '');
+  if (!trimmed) return fallbackUrl;
+
+  return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
+};
+
+const API_URL = normalizeApiUrl(process.env.REACT_APP_API_URL);
 
 const api = axios.create({
   baseURL: API_URL,
