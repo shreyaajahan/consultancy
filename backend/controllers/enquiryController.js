@@ -235,10 +235,12 @@ const sendReply = async (req, res) => {
       );
     } catch (emailError) {
       console.error('Error sending reply email:', emailError);
+      const reason = emailError.code || emailError.responseCode || emailError.command || emailError.message;
 
       return res.status(502).json({
         success: false,
-        message: 'Reply could not be sent by email. Please check email settings and try again.'
+        message: 'Reply could not be sent by email. Please check email settings and try again.',
+        reason
       });
     }
 
