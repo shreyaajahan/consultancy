@@ -88,6 +88,16 @@ const getProfile = async (req, res) => {
 // @access  Public (should be disabled in production)
 const createAdmin = async (req, res) => {
   try {
+    const canBootstrapAdmin =
+      process.env.NODE_ENV !== 'production' || process.env.ALLOW_ADMIN_BOOTSTRAP === 'true';
+
+    if (!canBootstrapAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: 'Admin bootstrap is disabled in production'
+      });
+    }
+
     const { name, email, password } = req.body;
 
     // Check if admin already exists
