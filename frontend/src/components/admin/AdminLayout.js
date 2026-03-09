@@ -5,7 +5,12 @@ import { FaHome, FaTools, FaProjectDiagram, FaEnvelope, FaSignOutAlt, FaBars, Fa
 import '../../styles/AdminLayout.css';
 
 const AdminLayout = ({ children }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(() => {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      return false;
+    }
+    return true;
+  });
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -16,6 +21,10 @@ const AdminLayout = ({ children }) => {
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
   };
 
   const isActive = (path) => {
@@ -31,16 +40,16 @@ const AdminLayout = ({ children }) => {
         </div>
         
         <nav className="sidebar-nav">
-          <Link to="/admin/dashboard" className={isActive('/admin/dashboard')}>
+          <Link to="/admin/dashboard" className={isActive('/admin/dashboard')} onClick={closeSidebar}>
             <FaHome /> <span>Dashboard</span>
           </Link>
-          <Link to="/admin/services" className={isActive('/admin/services')}>
+          <Link to="/admin/services" className={isActive('/admin/services')} onClick={closeSidebar}>
             <FaTools /> <span>Services</span>
           </Link>
-          <Link to="/admin/projects" className={isActive('/admin/projects')}>
+          <Link to="/admin/projects" className={isActive('/admin/projects')} onClick={closeSidebar}>
             <FaProjectDiagram /> <span>Projects</span>
           </Link>
-          <Link to="/admin/enquiries" className={isActive('/admin/enquiries')}>
+          <Link to="/admin/enquiries" className={isActive('/admin/enquiries')} onClick={closeSidebar}>
             <FaEnvelope /> <span>Enquiries</span>
           </Link>
         </nav>
@@ -51,6 +60,13 @@ const AdminLayout = ({ children }) => {
           </button>
         </div>
       </aside>
+
+      <button
+        type="button"
+        className={`sidebar-backdrop ${isSidebarOpen ? 'show' : ''}`}
+        onClick={closeSidebar}
+        aria-label="Close sidebar"
+      />
 
       {/* Main Content */}
       <div className={`admin-main ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>

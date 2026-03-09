@@ -3,6 +3,10 @@
   min-height: 100vh;
 }
 
+.sidebar-backdrop {
+  display: none;
+}
+
 /* Sidebar */
 .admin-sidebar {
   width: 280px;
@@ -164,8 +168,27 @@
 }
 
 @media (max-width: 768px) {
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 38, 53, 0.38);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 150;
+    border: none;
+  }
+
+  .sidebar-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .admin-sidebar {
+    width: min(82vw, 320px);
     transform: translateX(-100%);
+    z-index: 200;
   }
 
   .admin-sidebar.open {
