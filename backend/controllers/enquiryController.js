@@ -191,12 +191,6 @@ const sendReply = async (req, res) => {
       });
     }
 
-    enquiry.reply = reply;
-    enquiry.repliedAt = new Date();
-    enquiry.status = 'resolved';
-
-    await enquiry.save();
-
     // Send email to customer
     try {
       const emailHTML = `
@@ -241,8 +235,18 @@ const sendReply = async (req, res) => {
       );
     } catch (emailError) {
       console.error('Error sending reply email:', emailError);
-      // Don't fail the API call if email fails
+
+      return res.status(502).json({
+        success: false,
+        message: 'Reply could not be sent by email. Please check email settings and try again.'
+      });
     }
+
+    enquiry.reply = reply;
+    enquiry.repliedAt = new Date();
+    enquiry.status = 'resolved';
+
+    await enquiry.save();
 
     res.json({
       success: true,

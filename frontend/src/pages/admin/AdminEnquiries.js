@@ -114,7 +114,8 @@ const AdminEnquiries = () => {
       setTimeout(() => handleCloseModal(), 1500);
     } catch (err) {
       console.error('Error sending reply:', err);
-      setNotification({ show: true, message: 'Failed to send reply. Please try again.', type: 'error' });
+      const errorMessage = err.response?.data?.message || 'Failed to send reply. Please try again.';
+      setNotification({ show: true, message: errorMessage, type: 'error' });
       setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
     } finally {
       setReplySending(false);
