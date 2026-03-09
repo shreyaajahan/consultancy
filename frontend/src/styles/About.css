@@ -408,3 +408,39 @@
     gap: 18px;
   }
 }
+
+/* Scoped fallback to prevent collisions with other page-header styles. */
+@media (max-width: 1024px) {
+  .about-page .page-header-content {
+    grid-template-columns: 1fr !important;
+    gap: 18px;
+  }
+
+  .about-page .page-header-text {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .about-page .page-header-image {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-page .page-header {
+    min-height: 460px;
+  }
+
+  .about-page .page-header h1 {
+    font-size: 42px;
+    line-height: 1.05;
+  }
+
+  .about-page .page-header p {
+    font-size: 15px;
+  }
+
+  .about-page .page-header img {
+    height: 200px;
+  }
+}
