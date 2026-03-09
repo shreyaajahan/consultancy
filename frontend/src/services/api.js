@@ -1,16 +1,16 @@
 import axios from 'axios';
 
-const normalizeApiUrl = (url) => {
-  const fallbackUrl = 'http://localhost:5000/api';
-  if (!url) return fallbackUrl;
+const getApiBaseUrl = () => {
+  const rawUrl = (process.env.REACT_APP_API_URL || '').trim();
 
-  const trimmed = url.trim().replace(/\/+$/, '');
-  if (!trimmed) return fallbackUrl;
+  // Local development should default to local backend when env var is not set.
+  const fallbackUrl = 'http://localhost:5000';
+  const baseUrl = (rawUrl || fallbackUrl).replace(/\/+$/, '');
 
-  return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
+  return baseUrl.endsWith('/api') ? baseUrl : `${baseUrl}/api`;
 };
 
-const API_URL = normalizeApiUrl(process.env.REACT_APP_API_URL);
+const API_URL = getApiBaseUrl();
 
 const api = axios.create({
   baseURL: API_URL,
