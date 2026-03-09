@@ -180,6 +180,7 @@
 
   .menu-toggle {
     display: flex;
+    z-index: 220;
   }
 
   .nav {
@@ -195,6 +196,7 @@
     transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     border-left: 1px solid rgba(11,38,53,0.08);
+    z-index: 210;
   }
 
   .nav.active {
@@ -205,6 +207,12 @@
     padding: 14px 0;
     border-bottom: 1px solid rgba(11,38,53,0.06);
     font-size: 20px;
+    color: #0b2635;
+  }
+
+  .nav a:hover,
+  .nav a:focus {
+    color: #f59e0b;
   }
 
   .nav a::after {
